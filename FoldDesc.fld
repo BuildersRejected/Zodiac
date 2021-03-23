@@ -1,0 +1,23 @@
+#- A File Template for Folder Descriptions
+Should be named as such: <Name*>.fld
+
+*Name = Any Accepted names
+	-Denoting Folder
+	-Denoting Specific Topics
+	
+Zodiac Tool.
+
+Info:
+"JS Zodiac tool for saving/loading User Zodiac info."
+Alias: Ztool
+Main: ztool.js
+src: js_src
+
+This is intended as a generic JS module.
+There is a discord "helper" tool that makes use of the "Ztool"
+
+Discord Ztool
+Info: 
+"Discord helper for Ztool"
+Alias: ZtoolD
+Main: ztoold.js

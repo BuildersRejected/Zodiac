@@ -1,0 +1,15 @@
+{
+  "name": "zodiac",
+  "version": "1.0.0",
+  "description": "Tool for Saving and Loading User Zodiac info",
+  "main": "bot.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "BRXathartic",
+  "license": "ISC",
+  "dependencies": {
+    "discord": "^0.8.2",
+    "discord.js": "^12.5.1"
+  }
+}

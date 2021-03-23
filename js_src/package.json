@@ -1,0 +1,15 @@
+{
+  "name": "ztool",
+  "version": "1.0.0",
+  "description": "JS Zodiac tool for loading and saving User Zodiac info.",
+  "main": "ztool.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "zodiac",
+    "ztool"
+  ],
+  "author": "BRXathartic",
+  "license": "ISC"
+}
