@@ -6,14 +6,24 @@ const info = "Discord Bot helper Module for JS Zodiac tool.";
 module.exports = {
     //Signs: import {Signs} from "./constants.js";,
     //Ztool helper methods
-    addUser: function(name,age,sign) {
-        Ztool.addUser(name,age,sign);
+    addUser: function(guild,name,sign) {
+        Ztool.addUser(guild.id,name,sign);
     },
     showUser: function(name) {
         return Ztool.showUser(name);
     },
-    showUsers: function() {
-        return Ztool.showUsers();
+    showUsers: function(guild) {
+      //Ztool.showUsers(guild.id).then(cursor => {
+      let cursor;
+        cursor = Ztool.showUsers(guild.id);
+        // while (cursor.hasNext()) {
+        //   print(tojson(cursor.next()));
+        // }
+    //  });
+
+
+
+        return Ztool.showUsers(guild.id);
     },
     //signs
     listSigns: function() {

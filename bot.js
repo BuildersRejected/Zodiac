@@ -16,12 +16,13 @@ bot.on('message', message =>{
     if (args[0].startsWith("!")){
 
         args[0] = args[0].slice("!".length);
+
         if (args[0] == "add") {
             let name = args[1];
-            let age = args[2];
-            let sign = args[3];
-            ZtoolD.addUser(name,age,sign);
-            ZtoolD.showUsers();
+          //  let age = args[2];
+            let sign = args[2];
+            ZtoolD.addUser(message.guild,name,sign);
+            //ZtoolD.showUsers();
         } else if (args[0] == "show") {
             if (args[1]) {
                 //test
@@ -45,11 +46,11 @@ bot.on('message', message =>{
 
                 //message.channel.send(ZtoolD.showUser(args[1]));
             } else {
-                message.channel.send(ZtoolD.showUsers());
+                message.channel.send(ZtoolD.showUsers(message.guild));
             }
 
         }
     }
 });
 
-bot.login('ODIzMzkxNjM3MTE5NTY1ODU1.YFgJOA.wdoFf7JWSOZy_om6nRBIOpSsCOc');
+bot.login('');

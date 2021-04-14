@@ -1,12 +1,12 @@
 const calc = require('./calc.js');
 //users = [];
 class User {
-    constructor (name,age,sign){
+    constructor (name,sign){
         //super();
         //find sign
         //sig = calc.findSign(bday);
         this.name = name;
-        this.age = age;
+        //this.age = age;
         this.sign = sign;
         //this(name,age,sign);
         //this.sign =
@@ -17,8 +17,8 @@ class User {
 //for discord it will be exported as a module to use with node.js
 module.exports = {
     users: new Array(),
-    addUser: function(name,age,sign) {
-            let u  = new User(name,age,sign);
+    addUser: function(name,sign) {
+            let u  = new User(name,sign);
             this.users.push(u);
             console.log(name);
     },
