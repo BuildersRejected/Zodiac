@@ -1,6 +1,6 @@
 const Discord = require('discord.js');
 const ZtoolD = require("./ztoold.js");
-
+require("dotenv").config();
 const bot = new Discord.Client();
 
 const prefix = '!';
@@ -53,4 +53,4 @@ bot.on('message', message =>{
     }
 });
 
-bot.login('');
+bot.login(process.env.BOT_TOKEN);
