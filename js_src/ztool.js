@@ -77,8 +77,9 @@ module.exports = {
         //user_mod.addUser(name,sign);
     },
     showUser: async function(id, name) {
-        console.log(showFromDB(id,name));
-        return user_mod.showUser(name);
+        //console.log(DB.showFromDB(id,name));
+        //return user_mod.showUser(name);
+        return await DB.showFromDB(id,name);
     },
     showUsers: function(id) {
         showAllFromDB(id).then(console.log);

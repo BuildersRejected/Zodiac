@@ -21,3 +21,5 @@ Info:
 "Discord helper for Ztool"
 Alias: ZtoolD
 Main: ztoold.js
+
+permissions: 268486656

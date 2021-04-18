@@ -1,15 +1,39 @@
 const Discord = require('discord.js');
 const ZtoolD = require("./ztoold.js");
+const DB = require('./js_src/db.js');
 require("dotenv").config();
 const bot = new Discord.Client();
 
 const prefix = '!';
 
+bot.once('guildCreate',guild => {
+    DB.init(guild);
+});
+
 bot.once('ready', () =>{
   console.log(ZtoolD.info);
+  //console.log(guild.me.permissionsIn(guild));
 });
 
 bot.on('message', message =>{
+    //console.log(message.guild.me.permissionsIn(message.guild.me));
+    /////////////////////////
+    //module/comman loader
+    /*
+    const commands = new Discord.Collection();
+    this.cooldowns = new Discord.Collection();
+    commandFiles = fs.readdirSync('./plans/planA/commands').filter(file => file.endsWith('.js'));
+
+    for (const file of commandFiles) {
+        const command = require(`./commands/${file}`);
+        commands.set(command.name, command);
+    }
+    this.commands = commands;
+    */
+/////////////////////////////////
+
+
+
     if ( message.author.bot) return;
     //if (!message.content.startsWith(config.prefix) ||) return;
     const args = message.content.trim().split(/ +/);
@@ -49,6 +73,13 @@ bot.on('message', message =>{
                 message.channel.send(ZtoolD.showUsers(message.guild));
             }
 
+        } else if (args[0] == "invite") {
+            bot.generateInvite({
+                permissions: 268486656,
+            })
+                //.then(link => console.log(`Generated bot invite link: ${link}`))
+                .then(link => message.channel.send(`Generated bot invite link: ${link}`))
+                    .catch(console.error);
         }
     }
 });

@@ -1,9 +1,10 @@
 const Ztool = require('./js_src/ztool.js');
 const Discord = require('discord.js');
 
-const info = "Discord Bot helper Module for JS Zodiac tool.";
+//const info = "Discord Bot helper Module for JS Zodiac tool.";
 //module.exports = Ztool;
 module.exports = {
+    info: "Discord Bot helper Module for JS Zodiac tool.",
     //Signs: import {Signs} from "./constants.js";,
     //Ztool helper methods
     addUser: function(guild,name,sign) {
