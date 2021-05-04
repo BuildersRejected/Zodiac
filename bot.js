@@ -1,21 +1,22 @@
 const Discord = require('discord.js');
 const ZtoolD = require("./ztoold.js");
-const DB = require('./js_src/db.js');
+//const DB = require('./js_src/db.js');
 require("dotenv").config();
 const bot = new Discord.Client();
 
 const prefix = '!';
 
 bot.once('guildCreate',guild => {
-    DB.init(guild);
+    ZtoolD.init(guild);
 });
 
 bot.once('ready', () =>{
   console.log(ZtoolD.info);
+
   //console.log(guild.me.permissionsIn(guild));
 });
 
-bot.on('message', message =>{
+bot.on('message', async message =>{
     //console.log(message.guild.me.permissionsIn(message.guild.me));
     /////////////////////////
     //module/comman loader
@@ -50,27 +51,25 @@ bot.on('message', message =>{
         } else if (args[0] == "show") {
             if (args[1]) {
                 //test
-                // console.log("test");
-                // console.log(ZtoolD.getSign("Aries"));
-                // console.log(ZtoolD.getSign("bob"));
-                //
                 if (args[1] == "signs") {
                     message.channel.send(ZtoolD.listSigns());
                 } else if (ZtoolD.getSign(args[1])){
                     let sign = ZtoolD.getSign(args[1]);
 
                     ZtoolD.showSignD(message.channel,sign);
-
-
-
-
+                } else {
+                    const user = await ZtoolD.showUser(message.guild.id,args[1])
+                    //console.log(ZtoolD.showUser(message.guild.id,args[1]))
+                    //console.log("bit" + user.users[0].sign);
+                    message.channel.send(ZtoolD.showUserEmbed(user.users[0]));
                 }
                 //if equals sign,element,quality,polarity
                 //else name
 
                 //message.channel.send(ZtoolD.showUser(args[1]));
             } else {
-                message.channel.send(ZtoolD.showUsers(message.guild));
+                const users = await ZtoolD.showUsers(message.guild.id);
+                //message.channel.send(await users);
             }
 
         } else if (args[0] == "invite") {

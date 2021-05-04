@@ -167,9 +167,10 @@ module.exports = {
     getSign: function(signName) {
         let signFound = false;
         let sign = null;
-        if (this[signName]){
+        const signCap = signName.charAt(0).toUpperCase() + signName.slice(1)
+        if (this[signCap]){
             signFound = true;
-            sign = this[signName];
+            sign = this[signCap];
             console.log("sign in getSign"+sign["element"]);
         }
         if (!signFound) {

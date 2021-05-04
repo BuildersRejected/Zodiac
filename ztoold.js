@@ -7,16 +7,19 @@ module.exports = {
     info: "Discord Bot helper Module for JS Zodiac tool.",
     //Signs: import {Signs} from "./constants.js";,
     //Ztool helper methods
-    addUser: function(guild,name,sign) {
-        Ztool.addUser(guild.id,name,sign);
+    init: async function(guild) {
+            return await Ztool.init(guild);
     },
-    showUser: function(name) {
-        return Ztool.showUser(name);
+    addUser: async function(guild,name,sign) {
+        return await Ztool.addUser(guild.id,name,sign);
     },
-    showUsers: function(guild) {
+    showUser: async function(id,name) {
+        return await Ztool.showUser(id,name);
+    },
+    showUsers: async function(id) {
       //Ztool.showUsers(guild.id).then(cursor => {
       let cursor;
-        cursor = Ztool.showUsers(guild.id);
+        cursor = Ztool.showUsers(id);
         // while (cursor.hasNext()) {
         //   print(tojson(cursor.next()));
         // }
@@ -24,7 +27,7 @@ module.exports = {
 
 
 
-        return Ztool.showUsers(guild.id);
+        return Ztool.showUsers(id);
     },
     //signs
     listSigns: function() {
@@ -75,5 +78,49 @@ module.exports = {
     .setTimestamp()
     //.setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
     channel.send(exampleEmbed);
+},
+    showUserEmbed: function(DBuser) {
+        //DBuser = guild.users[0]
+        let color = "ffffff";
+        let url;
+        console.log(DBuser.name);
+        let sign = Ztool.getSign(DBuser.sign);
+        console.log(sign);
+        switch(sign.element) {
+            case "Fire": color = "DD2222";break;
+            case "Earth": color = "CC8888";break;
+            case "Air": color = "f7f7FF";break;
+            case "Water": color = "2222DD";break;
+        }
+        if (sign.image.startsWith('url')) {
+            url = "https://cdn.discordapp.com/embed/avatars/0.png";
+        } else {
+            url = sign.image;
+        }
+        const exampleEmbed = new Discord.MessageEmbed()
+           .setColor(color)
+              .setTitle(`User: ${DBuser.name}`)
+                 //.setURL('https://discord.js.org/')
+                   // .setAuthor('Some name', 'https://i.imgur.com/wSTFkRM.png', 'https://discord.js.org')
+                       .setDescription('Description')
+                          .setThumbnail(url)
+                          //"thumbnail": {"url": "https://cdn.discordapp.com/embed/avatars/0.png"
+
+                             .addFields(
+                                       //{ name: '\u200B', value: '\u200B' },
+                                       { name: 'Sign: ', value: DBuser.sign },
+                                       { name: 'Element: ', value: sign["element"] },
+                                       { name: 'Quality: ', value: sign["quality"] },
+                                       { name: '\u200B', value: '\u200B' },
+                                       //{ name: 'For more info try: ', value: `${config.prefix+plan.name} info all`},
+                                      // { name: 'Inline field title', value: 'Some value here', inline: true },
+                                       //{ name: 'Inline field title', value: 'Some value here', inline: true },
+                                      )
+    //.addField('Inline field title', 'Some value here', true)
+    //.setImage('https://i.imgur.com/wSTFkRM.png')
+    .setTimestamp()
+    //.setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
+    //channel.send(exampleEmbed);
+    return exampleEmbed;
     }
 }

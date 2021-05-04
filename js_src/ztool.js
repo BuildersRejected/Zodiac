@@ -64,6 +64,9 @@ user_mod.showUsers();
 
 module.exports = {
     //Signs: import {Signs} from "./constants.js";,
+    init: async function(guild) {
+        DB.init(guild);
+    },
     addUser: async function(id,name,sign) {
       // client.connect(err => {
       //   const collection = client.db("aRM").collection("ztool");
@@ -81,8 +84,8 @@ module.exports = {
         //return user_mod.showUser(name);
         return await DB.showFromDB(id,name);
     },
-    showUsers: function(id) {
-        showAllFromDB(id).then(console.log);
+    showUsers: async function(id) {
+        return await DB.showAllFromDB(id).then(console.log);
         //return user_mod.showUsers();
     },
     //signs
@@ -94,6 +97,7 @@ module.exports = {
         return Signs.Signs;
     },
     getSign: function(signName) {
-        return Signs.getSign(signName);
+        //return Signs.getSign(signName);
+        return DB.getSign(signName);
     }
 }

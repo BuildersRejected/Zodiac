@@ -1,15 +1,34 @@
 require("dotenv").config();
 const MongoClient = require('mongodb').MongoClient;
-const uri = process.env.DB_CONN_STRING;
+//const {env} = process.env;
+const connDB = process.env.DB_CONN_DB
+const connUri = process.env.DB_CONN_URI
+const connUser = process.env.DB_CONN_USER
+const connPass = process.env.DB_CONN_PASS
+const connUrl = process.env.DB_CONN_URL
+const connArgs = process.env.DB_CONN_ARGS
+//const uri = process.env.DB_CONN_STRING;
+const connUrlComplete = `${connUri}://${connUser}:${connPass}${connUrl}${connArgs}`;
 const upsert = {upsert: true};
+//console.log(env.DB_CONN_STRING);
+const Signs = require("./signs.js");
+const DBclient = new MongoClient(connUrlComplete, { useNewUrlParser: true, useUnifiedTopology: true });
 module.exports = {
+    connect: function() {
+        return client = new MongoClient(connUrlComplete, { useNewUrlParser: true, useUnifiedTopology: true });
+    },
+    close: function() {
+
+    },
     init: async function(guild) {
+        let client = DBclient;
         try {
-            const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+            //const client = new MongoClient(connUrlComplete, { useNewUrlParser: true, useUnifiedTopology: true });
             await client.connect();
 
-            let database = client.db('ztool');
+            let database = client.db(connDB);
             let ztools = database.collection('guilds');
+            let signsCollection = database.collection("signs");
 
             //let query = { guild: guild.id};
             let gid = {
@@ -19,16 +38,33 @@ module.exports = {
                 }
             };
             const result = await ztools.insertOne(gid);
+            //insert signs
+            const initSignsPut = [
+                        Signs.Aries,
+                        Signs["Taurus"],
+                        Signs["Gemini"],
+                        Signs["Cancer"],
+                        Signs["Leo"],
+                        Signs["Virgo"],
+                        Signs["Libra"],
+                        Signs["Scorpio"],
+                        Signs["Sagittarius"],
+                        Signs["Capricorn"],
+                        Signs["Aquarius"],
+                        Signs["Pisces"]
+                    ];
+            signsCollection.insertMany(initSignsPut);
         } finally {
           // Ensures that the client will close when you finish/error
-          await client.close();
+          //await client.close();
         }
     },
     removeGuild: async function(guild) {
         //remove entry of guild
     },
     addToDB: async function(id,name,sign) {
-        let client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+        //let client = new MongoClient(connUrlComplete, { useNewUrlParser: true, useUnifiedTopology: true });
+        let client = DBclient;
       try {
 
         await client.connect();
@@ -54,11 +90,11 @@ module.exports = {
         //console.log(adds);
       } finally {
         // Ensures that the client will close when you finish/error
-        await client.close();
+        //await client.close();
       }
   },
     showFromDB: async function(id,name) {
-        let client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+        let client = DBclient;
       try {
 
         await client.connect();
@@ -67,15 +103,79 @@ module.exports = {
         const ztools = database.collection('guilds');
 
         // Query for a movie that has the title 'Back to the Future'
-         const query = { guild: id, name: name};
+         const query = {
+             guild: id,
+             "users.name": name
+             //note: queries in arrays must include all fields unless your 'sub' value it with a dot
+             //below does not work unless yu also have sign: sign
+             //users: {
+                // name: name
+             //}
+         };
         // const movie = await movies.findOne(query);
         const adds = await ztools.findOne(query);
         //console.log(adds);
-        return adds;
+        return await adds;
       } finally {
         // Ensures that the client will close when you finish/error
-        await client.close();
+        //await client.close();
       }
+  },
+  showAllFromDB: async function() {
+      //let client = new MongoClient(connUrlComplete, { useNewUrlParser: true, useUnifiedTopology: true });
+      let client = DBclient;
+    try {
+
+      await client.connect();
+
+      const database = client.db('ztool');
+      const ztools = database.collection('guilds');
+
+      // Query for a movie that has the title 'Back to the Future'
+       const query = { guild: id, name: name};
+      // const movie = await movies.findOne(query);
+      const adds = await ztools.find({guild: id});
+      console.log(adds);
+      return adds;
+    } finally {
+      // Ensures that the client will close when you finish/error
+      //await client.close();
+    }
+    },
+    getSign: async function(signName) {
+        let signFound = false;
+        let sign = null;
+        const signCap = signName.charAt(0).toUpperCase() + signName.slice(1)
+        let client = DBclient;
+        try {
+            await client.connect();
+
+            const database = client.db('ztool');
+            const DBsigns = database.collection('signs');
+
+            // Query for a movie that has the title 'Back to the Future'
+             const query = { name: signCap};
+            // const movie = await movies.findOne(query);
+            const signZ = await ztools.findOne(query);
+            if (signZ) {
+                signFound = true;
+                sign = signZ;
+            }
+            //console.log(adds);
+            //return sign;
+        } catch {
+            
+        }
+        // if (this[signCap]){
+        //     signFound = true;
+        //     sign = this[signCap];
+        //     console.log("sign in getSign"+sign["element"]);
+        // }
+        if (!signFound) {
+            return null;
+        } else {
+            return sign;
+        }
     }
 
 }
