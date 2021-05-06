@@ -79,12 +79,12 @@ module.exports = {
     //.setFooter('Some footer text here', 'https://i.imgur.com/wSTFkRM.png');
     channel.send(exampleEmbed);
 },
-    showUserEmbed: function(DBuser) {
+    showUserEmbed: async function(DBuser) {
         //DBuser = guild.users[0]
         let color = "ffffff";
         let url;
-        console.log(DBuser.name);
-        let sign = Ztool.getSign(DBuser.sign);
+        //console.log(DBuser.username);
+        let sign = await Ztool.getSign(DBuser.sign);
         console.log(sign);
         switch(sign.element) {
             case "Fire": color = "DD2222";break;
@@ -99,7 +99,7 @@ module.exports = {
         }
         const exampleEmbed = new Discord.MessageEmbed()
            .setColor(color)
-              .setTitle(`User: ${DBuser.name}`)
+              .setTitle(`User: ${DBuser.username}`)
                  //.setURL('https://discord.js.org/')
                    // .setAuthor('Some name', 'https://i.imgur.com/wSTFkRM.png', 'https://discord.js.org')
                        .setDescription('Description')

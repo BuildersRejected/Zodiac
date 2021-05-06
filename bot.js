@@ -1,5 +1,6 @@
 const Discord = require('discord.js');
 const ZtoolD = require("./ztoold.js");
+const Signs = require("./js_src/signs.js")
 //const DB = require('./js_src/db.js');
 require("dotenv").config();
 const bot = new Discord.Client();
@@ -43,27 +44,41 @@ bot.on('message', async message =>{
     if (args[0].startsWith("!")){
 
         args[0] = args[0].slice("!".length);
-
+        let mention = message.mentions.users.first();
         if (args[0] == "add") {
-            let name = args[1];
+            //let name = args[1];
+
+            if (mention) {
+                let sign = args[2];
+                const isSign = await ZtoolD.getSign(args[2]);
+                console.log("isSign: " + isSign);
+                if (isSign) {
+                    //Signs.capitalize(sign)
+                    //console.log(mention.username);
+                    ZtoolD.addUser(message.guild,mention.username,Signs.capitalize(sign));
+                } else {
+                    message.reply(`Invalid Sign`);
+                    //message.reply(ZtoolD.addUsage());
+                }
+            }
           //  let age = args[2];
-            let sign = args[2];
-            ZtoolD.addUser(message.guild,name,sign);
+
+
             //ZtoolD.showUsers();
         } else if (args[0] == "show") {
             if (args[1]) {
                 //test
                 if (args[1] == "signs") {
                     message.channel.send(ZtoolD.listSigns());
-                } else if (ZtoolD.getSign(args[1])){
-                    let sign = ZtoolD.getSign(args[1]);
+                } else if (await ZtoolD.getSign(args[1])){
+                    let sign = await ZtoolD.getSign(args[1]);
 
                     ZtoolD.showSignD(message.channel,sign);
-                } else {
-                    const user = await ZtoolD.showUser(message.guild.id,args[1])
+                } else if(mention){
+                    const user = await ZtoolD.showUser(message.guild.id,mention.username)
                     //console.log(ZtoolD.showUser(message.guild.id,args[1]))
                     //console.log("bit" + user.users[0].sign);
-                    message.channel.send(ZtoolD.showUserEmbed(user.users[0]));
+                    message.channel.send(await ZtoolD.showUserEmbed(user.users[0]));
                 }
                 //if equals sign,element,quality,polarity
                 //else name

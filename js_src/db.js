@@ -26,7 +26,10 @@ module.exports = {
         let client = DBclient;
         try {
             //const client = new MongoClient(connUrlComplete, { useNewUrlParser: true, useUnifiedTopology: true });
-            await client.connect();
+            //await client.connect();
+            if (!client.isConnected()) {
+                await client.connect();
+            }
 
             let database = client.db(connDB);
             let ztools = database.collection('guilds');
@@ -68,8 +71,10 @@ module.exports = {
         //let client = new MongoClient(connUrlComplete, { useNewUrlParser: true, useUnifiedTopology: true });
         let client = DBclient;
       try {
-
-        await client.connect();
+          if (!client.isConnected()) {
+              await client.connect();
+          }
+        //await client.connect();
 
         let database = client.db('ztool');
         let ztools = database.collection('guilds');
@@ -79,7 +84,7 @@ module.exports = {
          let update = {
              $addToSet: {
                  users: {
-                     name: name,
+                     username: name,
                      sign: sign
                      //need date
                  }
@@ -98,16 +103,19 @@ module.exports = {
     showFromDB: async function(id,name) {
         let client = DBclient;
       try {
-
-        await client.connect();
+          if (!client.isConnected()) {
+              await client.connect();
+          }
+        //await client.connect();
 
         const database = client.db('ztool');
         const ztools = database.collection('guilds');
 
         // Query for a movie that has the title 'Back to the Future'
+        console.log(`db.showFromDB name: ${name}`)
          const query = {
              guild: id,
-             "users.name": name
+             "users.username": name
              //note: queries in arrays must include all fields unless your 'sub' value it with a dot
              //below does not work unless yu also have sign: sign
              //users: {
@@ -127,14 +135,16 @@ module.exports = {
       //let client = new MongoClient(connUrlComplete, { useNewUrlParser: true, useUnifiedTopology: true });
       let client = DBclient;
     try {
-
-      await client.connect();
+        if (!client.isConnected()) {
+            await client.connect();
+        }
+      // await client.connect();
 
       const database = client.db('ztool');
       const ztools = database.collection('guilds');
 
       // Query for a movie that has the title 'Back to the Future'
-       const query = { guild: id, name: name};
+       const query = { guild: id, username: name};
       // const movie = await movies.findOne(query);
       const adds = await ztools.find({guild: id});
       console.log(adds);
@@ -147,10 +157,14 @@ module.exports = {
     getSign: async function(signName) {
         let signFound = false;
         let sign = null;
-        const signCap = signName.charAt(0).toUpperCase() + signName.slice(1)
+        // const signCap = signName.charAt(0).toUpperCase() + signName.slice(1)
+        let signCap = Signs.capitalize(signName);
         let client = DBclient;
         try {
-            await client.connect();
+            if (!client.isConnected()) {
+                await client.connect();
+            }
+            //await client.connect();
 
             const database = client.db('ztool');
             const DBsigns = database.collection('signs');
@@ -158,10 +172,13 @@ module.exports = {
             // Query for a movie that has the title 'Back to the Future'
              const query = { name: signCap};
             // const movie = await movies.findOne(query);
-            const signZ = await ztools.findOne(query);
+
+            const signZ = await DBsigns.findOne(query);
+            console.log(`signZ: ${signZ}`)
             if (signZ) {
                 signFound = true;
                 sign = signZ;
+                console.log(sign.name);
             }
             //console.log(adds);
             //return sign;

@@ -164,6 +164,9 @@ module.exports = {
         let str = this.SignList;
         return str;
     },
+    capitalize: function(signName) {
+        return signName.charAt(0).toUpperCase() + signName.slice(1)
+    },
     getSign: function(signName) {
         let signFound = false;
         let sign = null;
