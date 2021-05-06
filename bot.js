@@ -3,8 +3,10 @@ const ZtoolD = require("./ztoold.js");
 //const DB = require('./js_src/db.js');
 require("dotenv").config();
 const bot = new Discord.Client();
+const Cleanup = require("node-cleanup");
 
 const prefix = '!';
+
 
 bot.once('guildCreate',guild => {
     ZtoolD.init(guild);
@@ -82,5 +84,12 @@ bot.on('message', async message =>{
         }
     }
 });
+
+
+
+
+
+
+
 
 bot.login(process.env.BOT_TOKEN);

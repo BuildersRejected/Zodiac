@@ -13,6 +13,8 @@ const upsert = {upsert: true};
 //console.log(env.DB_CONN_STRING);
 const Signs = require("./signs.js");
 const DBclient = new MongoClient(connUrlComplete, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const Cleanup = require("node-cleanup");
 module.exports = {
     connect: function() {
         return client = new MongoClient(connUrlComplete, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -164,7 +166,7 @@ module.exports = {
             //console.log(adds);
             //return sign;
         } catch {
-            
+
         }
         // if (this[signCap]){
         //     signFound = true;
@@ -178,4 +180,23 @@ module.exports = {
         }
     }
 
-}
+};
+
+Cleanup(function (exitCode, signal) {
+    if (signal) {
+        if (DBclient.isConnected()) {
+            console.log("\nDB Connection Open");
+            DBclient.close()
+            .then(() => {
+                if (!DBclient.isConnected()) {
+                    console.log("DB Connection Closed");
+                    console.log(`closing Signal: ${signal}`);
+                    process.kill(process.pid, signal);
+                }
+
+            });
+        }
+        Cleanup.uninstall();
+        return false;
+    }
+});
